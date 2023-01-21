@@ -1,8 +1,13 @@
+from django.contrib.auth import get_user_model
 from django.shortcuts import render
+from django.views import generic as generic_view
+
+UserModel = get_user_model()
 
 
-def register_user(request):
-    return render(request, 'accounts/register-page.html')
+class RegisterUserView(generic_view.CreateView):
+    model = UserModel
+    template_name = 'accounts/register-page.html'
 
 
 def login_user(request):

@@ -1,9 +1,8 @@
-from django.core.exceptions import ValidationError
 from django.core.validators import MinLengthValidator
 from django.db import models
 
+from petstagram.core.validators import validate_max_image_size
 from petstagram.pets.models import Pet
-from petstagram.photos.validators import validate_max_image_size
 
 
 class Photo(models.Model):
