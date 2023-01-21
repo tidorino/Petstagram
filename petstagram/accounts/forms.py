@@ -1,5 +1,5 @@
 from django.contrib.auth import get_user_model
-from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth.forms import UserCreationForm, UsernameField
 
 UserModel = get_user_model()
 
@@ -7,4 +7,7 @@ UserModel = get_user_model()
 class RegisterPetstagramUserForm(UserCreationForm):
     class Meta:
         model = UserModel
-        fields = '__all__'
+        fields = ('username', 'email',)
+        field_classes = {'username': UsernameField}
+
+
