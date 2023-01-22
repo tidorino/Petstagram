@@ -39,17 +39,17 @@ class DetailsUserView(generic_view.DetailView):
 class EditUserView(generic_view.UpdateView):
     model = UserModel
     template_name = 'accounts/profile-edit-page.html'
-    fields = ('first_name', 'last_name', 'username', 'email', 'profile_picture', 'gender',)
-    # form_class = EditPetstagramUserForm
+    fields = ('first_name', 'last_name', 'email', 'gender',)
+
+    def get_success_url(self):
+        return reverse_lazy('details user', kwargs={
+            'pk': self.request.user.pk,
+        })
 
 
-def delete_user(request, pk):
-    return render(request, 'accounts/profile-delete-page.html')
+class DeleteUserView(generic_view.DeleteView):
+    template_name = 'accounts/profile-delete-page.html'
+    model = UserModel
+    success_url = reverse_lazy('index')
 
 
-def user_details(request, pk):
-    return render(request, 'accounts/profile-details-page.html')
-
-
-def edit_user(request, pk):
-    return render(request, 'accounts/profile-edit-page.html')

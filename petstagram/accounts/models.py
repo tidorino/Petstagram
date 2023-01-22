@@ -53,8 +53,8 @@ class PetstagramUser(AbstractUser):
     )
 
     profile_picture = models.URLField(
-        null=False,
-        blank=False,
+        null=True,
+        blank=True,
     )
 
     gender = models.CharField(

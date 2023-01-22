@@ -12,18 +12,6 @@ class RegisterPetstagramUserForm(UserCreationForm):
         field_classes = {'username': UsernameField}
 
 
-# class EditPetstagramUserForm():
-#     class Meta:
-#         model = UserModel
-#         fields = ('first_name', 'last_name', 'username', 'email', 'profile_picture', 'gender',)
-#         labels = {
-#             'first_name': 'First name',
-#             'last_name': 'Last name',
-#             'username': 'Username',
-#             'email': 'Email',
-#             'profile_picture': 'Image',
-#             'gender': 'Gender',
-#         }
 
 
 
