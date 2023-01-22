@@ -1,11 +1,13 @@
 {% extends 'base/base.html' %}
+{% load placeholders %}
 {% block page_content %}
     <!-- Start Login Section-->
     <div class="login-register-div">
         <div class="login-register-box">
             <h1>Petstagram</h1>
             <form method="post" action="{% url 'login user' %}">
-                {{ form }}
+                {{ form.username|placeholder:'Username' }}
+                {{ form.password|placeholder:'Password' }}
                 <input type="hidden" name="next" value="{{ next }}">
                 <!-- Login Button-->
                 <button type="submit">Log in</button>

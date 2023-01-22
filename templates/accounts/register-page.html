@@ -1,12 +1,10 @@
 {% extends 'base/base.html' %}
 {% load placeholders %}
-{#{% load custom_filters %}#}
 {% block page_content %}
     <!-- Start Register Section -->
     <div class="login-register-div">
         <div class="login-register-box">
             <h1>Petstagram</h1>
-            <!-- Start Register Form -->
             <form method="post" action="{% url 'register user' %}">
                 {{ form.username|placeholder:'Username' }}
                 {{ form.email|placeholder:'Email' }}
@@ -18,8 +16,6 @@
             </form>
         </div>
         <div class="second-option">
-
-            <!-- Link to Login Page -->
             <p>Have an account? <a href="{% url 'login user' %}">Log in</a></p>
         </div>
     </div>
