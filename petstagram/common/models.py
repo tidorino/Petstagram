@@ -28,6 +28,11 @@ class PhotoComment(models.Model):
         blank=True,
     )
 
+    user = models.ForeignKey(
+        UserModel,
+        on_delete=models.RESTRICT,
+    )
+
     class Meta:
         ordering = ['publication_date_and_time']
 
@@ -38,4 +43,9 @@ class PhotoLike(models.Model):
         on_delete=models.RESTRICT,
         null=False,
         blank=True,
+    )
+
+    user = models.ForeignKey(
+        UserModel,
+        on_delete=models.RESTRICT,
     )
