@@ -1,3 +1,4 @@
+from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect, resolve_url
 from django.urls import reverse
 from pyperclip import copy
@@ -29,25 +30,20 @@ def index(request):
     return render(request, 'common/home-page.html', context)
 
 
-def get_user_liked_photos(photo_id):
-    return PhotoLike.objects.filter(photo_id=photo_id)
-
-
+@login_required
 def like_photo(request, photo_id):
-    user_liked_photo = get_user_liked_photos(photo_id)
+    user_liked_photo = PhotoLike.objects\
+        .filter(photo_id=photo_id, user_id=request.user.pk,)
+
     if user_liked_photo:
         user_liked_photo.delete()
     else:
         PhotoLike.objects.create(
             photo_id=photo_id,
+            user_id=request.user.pk,
         )
 
     return redirect(request.META['HTTP_REFERER'] + f'#photo-{photo_id}')
-
-    # photo_like = PhotoLike(
-    #     photo_id=photo_id,
-    # )
-    # photo_like.save()
 
 
 def share_photo(request, photo_id):
@@ -58,6 +54,7 @@ def share_photo(request, photo_id):
     return redirect(request.META['HTTP_REFERER'] + f'#photo-{photo_id}')
 
 
+@login_required
 def comment_photo(request, photo_id):
     photo = Photo.objects.filter(pk=photo_id).get()
     form = PhotoCommentForm(request.POST)

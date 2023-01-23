@@ -16,57 +16,49 @@
                             <div class="profilepic">
                                 <div class="profile_img">
                                     <div class="image">
-                                        <img src="{% static 'images/person.png' %}" alt="img8">
+                                        <img src="{{photo.user.profile_picture}}"
+                                             alt="{{ photo.user.username }}">
                                     </div>
                                 </div>
                             </div>
                         </a>
                         <h3>
-
-                            <!-- Link to User Profile Details Page -->
-                            <a href="#">
-                                <!-- IF user has first name and last name -->
-                                Diyan Kalaydzhiev
-                                <!-- else -->
-                                <!-- show user username -->
+                            <a href="">
+                                {% if photo.user.get_full_name %}
+                                    {{ photo.user.get_full_name}}
+                                {% else %}
+                                    {{ photo.user.username}}
+                                {% endif %}
                             </a>
                             <br>
 
-                            <!-- IF the photo has location -->
                             {% if photo.location %}
                                 <span>{{ photo.location}}</span>
                             {% endif %}
-                            <!-- IF the viewer is the creator of the photo -->
-                            <div class="edit-delete-btns">
-
-                                <!-- Link to Edit Pet Photo Page -->
-                                <a href="{% url 'edit photo' pk=photo.pk %}">
-                                    <img class="edit-img"
-                                         src="{% static 'images/edit-pen-icon-6.jpg' %}"
-                                         alt="edit button">
-                                </a>
-
-                                <!-- Link to Delete Pet Photo Page -->
-                                <a href="{% url 'delete photo' pk=photo.pk %}">
-                                    <img class="bin-img" src="{% static 'images/icon-remove-22.jpg' %}"
-                                         alt="bin button">
-                                </a>
-                            </div>
-                            <!-- End IF the viewer is the creator of the photo -->
-
+                            {% if is_owner %}
+                                <div class="edit-delete-btns">
+                                    <a href="{% url 'edit photo' pk=photo.pk %}">
+                                        <img class="edit-img"
+                                            src="{% static 'images/edit-pen-icon-6.jpg' %}"
+                                            alt="edit button">
+                                    </a>
+                                    <a href="{% url 'delete photo' pk=photo.pk %}">
+                                        <img class="bin-img" src="{% static 'images/icon-remove-22.jpg' %}"
+                                            alt="bin button">
+                                    </a>
+                                </div>
+                            {% endif %}
                         </h3>
                     </div>
-                    <!-- End User Details and Image Location Section -->
-
                 </div>
 
                 <!-- Start Pet Photo -->
-                <div class="imgBx" id="place the id of the photo here">
+                <div class="imgBx" id="{{ photo.pk}}">
                     <!-- Pet Photo -->
-                    <img src="{% static 'images/axolotl.jpeg' %}"
-                         alt="post" class="cover">
+                    <img src="/media/{{photo.photo}}"
+                         alt="photo of the pets {{ photo.tagged_pets.all|join:', ' }}"
+                         class="cover">
                 </div>
-                <!-- End Pet Photo -->
 
                 <div class="bottom">
                     <!-- Start Like and Share Buttons Section -->
@@ -133,23 +125,18 @@
                             </a>
                         </div>
                     </div>
-                    <!-- End Like and Share Buttons Section -->
                     <!-- Number of Likes for the Photo -->
-                    <p class="likes">{{ photo.likes_count }} likes</p>
-
+                    <p class="likes">{{ likes_count }} likes</p>
                     <!-- Start Tagged Pets Section-->
-                    <!-- Link to First Tagged Pet Details Page -->
                     {% for pet in photo.tagged_pets.all %}
                         {# TODO: change username to actual user when auth is available #}
-                        <a href="{% url 'pet details' username='doncho' pet_slug=pet.slug %}">
+                        <a href="{% url 'pet details' username=pet.user.username pet_slug=pet.slug %}">
                             <p class="message">
                                 <b>{{ pet.name }}</b>
                             </p>
                         </a>
                     {% endfor %}
-                    <!-- End Tagged Pets Section-->
-
-                    <!-- Date of Publication or edit of the Photo -->
+                         <!-- Date of Publication or edit of the Photo -->
                     <h5 class="postTime">{{ photo.publication_date}}</h5>
 
                     <!-- Start Comments Section -->
