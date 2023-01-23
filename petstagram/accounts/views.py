@@ -1,6 +1,7 @@
-from django.contrib.auth import get_user_model, views as auth_views
+from django.contrib.auth import get_user_model, views as auth_views, \
+    authenticate, login
 
-from django.shortcuts import render
+from django.shortcuts import redirect
 from django.urls import reverse_lazy
 from django.views import generic as generic_view
 
@@ -13,6 +14,17 @@ class RegisterUserView(generic_view.CreateView):
     form_class = RegisterPetstagramUserForm
     template_name = 'accounts/register-page.html'
     success_url = reverse_lazy('index')
+
+    def form_valid(self, form):
+        # save the new user first
+        form.save()
+        # get the username and password
+        username = self.request.POST['username']
+        password = self.request.POST['password1']
+        # authenticate user then login
+        user = authenticate(username=username, password=password)
+        login(self.request, user)
+        return redirect(self.success_url)
 
 
 class LoginUserView(auth_views.LoginView):
@@ -39,7 +51,9 @@ class DetailsUserView(generic_view.DetailView):
 class EditUserView(generic_view.UpdateView):
     model = UserModel
     template_name = 'accounts/profile-edit-page.html'
-    fields = ('first_name', 'last_name', 'email', 'gender',)
+    fields = ('first_name', 'last_name', 'email', 'profile_picture', 'gender',)
+    context_object_name = object
+    print(object)
 
     def get_success_url(self):
         return reverse_lazy('details user', kwargs={
@@ -53,3 +67,6 @@ class DeleteUserView(generic_view.DeleteView):
     success_url = reverse_lazy('index')
 
 
+"""
+tedy123456
+"""

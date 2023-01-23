@@ -6,7 +6,9 @@
         <div class="login-register-box">
             <h1>Petstagram</h1>
             <form method="post" action="{% url 'login user' %}">
+                {{ form.username.errors}}
                 {{ form.username|placeholder:'Username' }}
+                {{ form.password.errors}}
                 {{ form.password|placeholder:'Password' }}
                 <input type="hidden" name="next" value="{{ next }}">
                 <!-- Login Button-->

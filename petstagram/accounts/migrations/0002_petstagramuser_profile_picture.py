@@ -13,7 +13,10 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='petstagramuser',
             name='profile_picture',
-            field=models.URLField(),
+            field=models.URLField(
+                null=True,
+                blank=True,
+            ),
             preserve_default=False,
         ),
     ]
