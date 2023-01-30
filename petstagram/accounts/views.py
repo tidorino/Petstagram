@@ -15,16 +15,21 @@ class RegisterUserView(generic_view.CreateView):
     template_name = 'accounts/register-page.html'
     success_url = reverse_lazy('index')
 
-    def form_valid(self, form):
-        # save the new user first
-        form.save()
-        # get the username and password
-        username = self.request.POST['username']
-        password = self.request.POST['password1']
-        # authenticate user then login
-        user = authenticate(username=username, password=password)
-        login(self.request, user)
-        return redirect(self.success_url)
+    def post(self, request, *args, **kwargs):
+        response = super().post(request, *args, **kwargs)
+        login(request, self.object)
+
+        return response
+    # def form_valid(self, form):
+    #     # save the new user first
+    #     form.save()
+    #     # get the username and password
+    #     username = self.request.POST['username']
+    #     password = self.request.POST['password1']
+    #     # authenticate user then login
+    #     user = authenticate(username=username, password=password)
+    #     login(self.request, user)
+    #     return redirect(self.success_url)
 
 
 class LoginUserView(auth_views.LoginView):
@@ -48,7 +53,8 @@ class DetailsUserView(generic_view.DetailView):
 
         photos = self.object.photo_set.prefetch_related('photolike_set')
 
-        context['photos_count'] = self.object.photo_set.count()
+        context['photos_count'] = photos.count()
+        # context['photos_count'] = self.object.photo_set.count()
         context['likes_count'] = sum(x.photolike_set.count() for x in photos)
 
         return context

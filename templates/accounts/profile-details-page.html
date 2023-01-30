@@ -79,18 +79,16 @@
         </div>
           <!-- Start Last Uploaded Photos Section -->
         <div class="pet-photos">
+            {% for pet_photo in object.photo_set.all %}
             <!-- Link to Last Uploaded Pet Photo -->
-            <a href="#">
+                <a href="{% url 'photo details' pk=pet_photo.pk %}">
                 <!-- Pet Photo -->
-                <img src="https://i.natgeofe.com/n/de94c416-6d23-45f5-9708-e8d56289268e/naturepl_01132178.jpg?w=636&h=631"
-                     alt="pet img">
-            </a>
+                    <img src="{{ pet_photo.photo.path }}"
+                        alt="pet img">
+                </a>
             <!-- Link to Uploaded Pet Photo -->
-            <a href="#">
-                <!-- Pet Photo -->
-                <img src="https://cf.ltkcdn.net/small-pets/images/orig/278587-1600x1066-goldfish-swimming-in-fish-tank.jpg"
-                     alt="pet img">
-            </a>
+
+            {% endfor %}
         </div>
     </div>
 {% endblock %}
