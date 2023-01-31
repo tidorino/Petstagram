@@ -1,5 +1,5 @@
-from django.contrib.auth import get_user_model, views as auth_views, \
-    authenticate, login
+from django.contrib.auth import get_user_model, views as auth_views, login, authenticate
+from django.core.paginator import Paginator
 
 from django.shortcuts import redirect
 from django.urls import reverse_lazy
@@ -15,21 +15,22 @@ class RegisterUserView(generic_view.CreateView):
     template_name = 'accounts/register-page.html'
     success_url = reverse_lazy('index')
 
-    def post(self, request, *args, **kwargs):
-        response = super().post(request, *args, **kwargs)
-        login(request, self.object)
-
-        return response
-    # def form_valid(self, form):
-    #     # save the new user first
-    #     form.save()
-    #     # get the username and password
-    #     username = self.request.POST['username']
-    #     password = self.request.POST['password1']
-    #     # authenticate user then login
-    #     user = authenticate(username=username, password=password)
-    #     login(self.request, user)
-    #     return redirect(self.success_url)
+    # def post(self, request, *args, **kwargs):
+    #     response = super().post(request, *args, **kwargs)
+    #
+    #     login(request, self.object)
+    #
+    #     return response
+    def form_valid(self, form):
+        # save the new user first
+        form.save()
+        # get the username and password
+        username = self.request.POST['username']
+        password = self.request.POST['password1']
+        # authenticate user then login
+        user = authenticate(username=username, password=password)
+        login(self.request, user)
+        return redirect(self.success_url)
 
 
 class LoginUserView(auth_views.LoginView):
@@ -43,6 +44,17 @@ class LogoutUserView(auth_views.LogoutView):
 class DetailsUserView(generic_view.DetailView):
     model = UserModel
     template_name = 'accounts/profile-details-page.html'
+    photos_paginate_by = 3
+
+    def get_photos_page(self):
+        return self.request.GET.get('page', 1)
+
+    def get_paginated_photos(self):
+        page = self.get_photos_page()
+        photos = self.object.photo_set.order_by('-publication_date')
+
+        paginator = Paginator(photos, self.photos_paginate_by)
+        return paginator.get_page(page)
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -56,6 +68,8 @@ class DetailsUserView(generic_view.DetailView):
         context['photos_count'] = photos.count()
         # context['photos_count'] = self.object.photo_set.count()
         context['likes_count'] = sum(x.photolike_set.count() for x in photos)
+
+        context['photos'] = self.get_paginated_photos()
 
         return context
 

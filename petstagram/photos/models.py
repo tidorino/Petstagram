@@ -2,6 +2,8 @@ from django.contrib.auth import get_user_model
 from django.core.validators import MinLengthValidator
 from django.db import models
 
+from cloudinary import models as cloudinary_models
+
 from petstagram.core.validators import validate_max_image_size
 from petstagram.pets.models import Pet
 
@@ -15,11 +17,10 @@ class Photo(models.Model):
 
     LOCATION_MAX_LEN = 30
 
-    photo = models.ImageField(
-        upload_to='pet_photos/',
-        validators=(
-            validate_max_image_size,
-        ),
+    photo = cloudinary_models.CloudinaryField(
+        # validators=(
+        #     validate_max_image_size,
+        # ),
         null=False,
         blank=True,
     )

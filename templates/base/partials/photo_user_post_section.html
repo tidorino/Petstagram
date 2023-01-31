@@ -4,11 +4,11 @@
     <div class="top">
         <div class="userDetails">
             <!-- Link to User Profile Page -->
-            <a href="{% url 'details user' pk=request.user.pk %}">
+            <a href="#">
                 <div class="profilepic">
                     <div class="profile_img">
                         <div class="image">
-                            <img src="{{object.profile_picture}}"
+                            <img src="{% static 'images/person.png' %}"
                                  alt="{{ object.username }}">
                         </div>
                     </div>
@@ -16,7 +16,7 @@
             </a>
             <h3>
                             <!-- Link to User Profile Page -->
-                <a href="{% url 'details user' pk=request.user.pk %}">
+                <a href="{% url 'details user' pk=1 %}">
                     {% if object.get_full_name %}
                         {{ object.get_full_name }}
                     {% else %}
@@ -34,7 +34,7 @@
 
                 <!-- Start Pet Photo -->
     <div class="imgBx" id="photo-{{ photo.pk }}">
-        <img src="media/{{photo.photo}}"
+        <img src="{{photo.photo.url}}"
              alt="post" class="cover">
     </div>
                 <!-- End Pet Photo -->
